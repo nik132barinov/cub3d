@@ -2,6 +2,9 @@ SRCS			=	main.c\
 					map_file_parse.c \
 					map_print.c		 \
 					map_get_set.c	 \
+					libft/ft_atoi.c	 \
+					libft/ft_isdigit.c \
+					libft/ft_strlen.c	\
 #					cub3d.c game.c bmp.c \
 #					config/config.c config/map.c config/map_check.c \
 #					config/parse_params.c config/parse_texture.c \
