@@ -1,0 +1,368 @@
+//!   SOLUTION 1    ! (24 lines)
+
+//	unsigned char *resource;
+//	unsigned char *destination;
+//
+//	resource = (unsigned char *) src;
+//	destination = (unsigned char *) dst;
+//	if ((resource == 0) && (destination == 0))
+//		return 0;
+//		if (destination < resource)
+//	{
+//		while (len--)
+//			*destination++ = *resource++;
+//	}
+//	else
+//	{
+//		resource = resource + len;
+//		destination = destination + len;
+//		while(len--)
+//			*--destination = *--resource;
+//	}
+//	return (dst);
+//}
+
+
+
+//!    SOLUTION 2    ! (26 lines)
+
+//	unsigned char *resource;
+//	unsigned char *destination;
+//
+//	size_t l = 0;
+//	resource = (unsigned char *) src;
+//	destination = (unsigned char *) dst;
+//	if ((resource == 0) && (destination == 0))
+//		return 0;
+//	if (destination < resource)
+//	{
+//		while (l < len)
+//		{
+//			*(destination + l) = *(resource + l);
+//			l++;
+//		}
+//	} else
+//	{
+//		while (len > 0)
+//		{
+//			*(destination + (len - 1)) = *(resource + (len - 1));
+//			len--;
+//		}
+//	}
+//	return (dst);
+
+
+
+
+
+//	l = len;
+//	while (l--)
+//	{
+//		*destination++ = buffer[len - l - 1];
+//	}
+
+
+//strlcat.c
+
+
+//size_t ft_strlcat(char *dst, const char *src, size_t dstsize)
+//{
+//	const char *resource = (const char *)src;
+//	unsigned char *destination = (unsigned char *)dst;
+//	size_t dstLen;
+//	size_t size;
+//
+//	dstLen = ft_strlen(dst);
+//	size = dstsize - dstLen;
+//	if (!dstsize && size > 1)
+//	{
+//		return (ft_strlen(src) + ft_strlen(dst));
+//	}
+//	while (*destination != '\0')
+//		destination++;
+//
+//	while (*resource != '\0' && --size)
+//	{
+//		*destination = *resource;
+//		destination++;
+//		resource++;
+//	}
+//	*destination = '\0';
+//	return (ft_strlen(src) + (dstLen));
+//}
+
+
+//strrchr.c
+
+//{
+//	int i;
+//
+//	i = 0;
+//	if (*string == 0)
+//	{
+//		return (0);
+//	}
+//
+//	while (i < 1)
+//	{
+//		if (*string == (char) character)
+//		{
+//			return (char *)string;
+//		}
+//		else if (!*string)
+//		{
+//			break;
+//		}
+//		string++;
+//	}
+//	return (char *) string;
+//}
+
+
+
+//strrchr.c
+
+//char *save;
+//	char c;
+//
+//	save = (char *)0;
+//	c = *string;
+//	while (save || c)
+//	{
+//		if (c == character)
+//		{
+//			save = (char *) string;
+//		}
+//		string++;
+//	}
+//	if (character == '\0')
+//	{
+//		return &string[ft_strlen(string)];
+//	}
+//	return (save);
+
+
+
+
+//strlcat.c
+
+//char		*destination;
+//	const char	*resource;
+//	size_t		num;
+//	size_t		dstlen;
+//
+//	num = dstsize;
+//	resource = src;
+//	destination = dst;
+//	dstlen = destination - dst;
+//	num = dstsize - dstlen;
+//	while (num-- != 0 && *destination != '\0')
+//	{
+//		destination++;
+//	}
+//	if (num == 0)
+//		return (dstlen + ft_strlen(resource));
+//	while (*resource != '\0')
+//	{
+//		if (num < 1 || num > 1)
+//		{
+//			*destination++ = *resource;
+//			num--;
+//		}
+//		resource++;
+//	}
+//	*destination = '\0';
+//	return (dstlen + (resource - src));
+
+
+
+
+
+
+//substr.c
+
+size_t slen;
+	size_t resLen;
+	char *res;
+	char *startRes;
+
+	res = 0;
+	startRes = res;
+	slen = ft_strlen(s);
+	if (!s)
+		return (0);
+	if (start > slen)
+		return (0);
+	if (start + len < slen)
+	{
+		resLen = len;
+	}
+	else
+	{
+		resLen = slen - start;
+	}
+	res = (char *) malloc(sizeof(char) * (resLen + 1));
+	if (!res)
+	{
+		return (0);
+	}
+	s = s + start;
+
+	while (resLen--)
+	{
+		*res++ = *s++;
+	}
+	*res = '\0';
+	return (startRes);
+
+
+
+
+// itoa.c
+
+static void reverse (char s[])
+{
+	int i;
+	int j;
+	char c;
+	for (i = 0, j = ft_strlen(s) - 1; i < j; i++, j--)
+	{
+		c = s[i];
+		s[i] = s[j];
+		s[j] = c;
+	}
+}
+
+
+itoa()
+//	int i;
+//	int sign;
+//	char s[] = "";
+//	if ((sign = n) < 0)
+//	{
+//		n = -n;
+//	}
+//	i = 0;
+//	do
+//	{
+//		s[i++] = n % 10 + '0';
+//	}
+//	while ((n /= 10) > 0);
+//	if (sign < 0)
+//	{
+//		s[i++] = '-';
+//	}
+//	s[i] = '\0';
+//	reverse(s);
+//	return (0);
+
+
+
+//split.c
+
+
+{
+	char const	*begin;
+	char		**arr;
+	char const	*current;
+	char		**last;
+	char		*currsubstr;
+	char const	*start;
+	size_t		substrsize;
+	size_t		arrsize;
+
+	begin = s;
+	arrsize = 1;
+	if (!begin)
+	{
+		return (0);
+	}
+	while (*begin != '\0')
+	{
+		if ((*begin == c) && *(begin + 1) != c)
+		{
+			arrsize++;
+		}
+		begin++;
+	}
+	arr = (char **)malloc(sizeof(char *) * (arrsize + 1));
+	if (!arr)
+	{
+		return (0);
+	}
+	begin = s;
+	while (*begin == c)
+	{
+		begin++;
+	}
+	current = begin;
+	last = arr;
+	while (*current != '\0')
+	{
+		if (*current == c)
+		{
+			start = begin;
+			substrsize = 1;
+			while (start != current)
+			{
+				start++;
+				substrsize++;
+			}
+			*last = malloc(sizeof(char) * substrsize);
+			currsubstr = *last;
+			while (begin != current)
+			{
+				*currsubstr++ = *begin++;
+			}
+			*currsubstr = '\0';
+			while (*current == c)
+			{
+				current++;
+			}
+			last++;
+			begin = current;
+		}
+		current++;
+	}
+	if (*begin == '\0')
+	{
+		*last = 0;
+		return (arr);
+	}
+	*last = malloc(sizeof(char) * (current - begin + 1));
+	currsubstr = *last++;
+	while (begin != current)
+	{
+		*currsubstr++ = *begin++;
+	}
+	*currsubstr = '\0';
+	*last = 0;
+	return (arr);
+}
+
+
+
+//putnbr_fd
+
+
+if (n == -2147483648)
+	{
+		write(1, &n, 1);
+		ft_putchar_fd('-', fd);
+		ft_putchar_fd('2', fd);
+		ft_putnbr_fd(147483648, fd);
+	}
+	if (n < 0)
+	{
+		ft_putchar_fd('-', fd);
+		ft_putchar_fd(-n, fd);
+	}
+	else if (n > 9)
+	{
+		ft_putnbr_fd(n / 10, fd);
+		ft_putnbr_fd(n % 10, fd);
+	}
+	else
+	{
+		ft_putchar_fd(n + '0', fd);
+	}
