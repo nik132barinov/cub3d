@@ -90,7 +90,7 @@ t_map *map_file_parse(const char *filepath)
 	}
 	read_map(map, fd);
 	close(fd);
-	map_print(map);
+	//map_print(map);
 	if (!validate(map))
 	{
 		free(map);
@@ -107,7 +107,7 @@ int validate(t_map *map)
 	int col = 0;
 	char c;
 
-	printf("n_rows = %i, n_cols = %i\n", map->n_rows, map->n_cols);
+	//printf("n_rows = %i, n_cols = %i\n", map->n_rows, map->n_cols);
 	while (row < map->n_rows)
 	{
 		while (col < map->n_cols)
@@ -140,10 +140,10 @@ int valid(char c, int row, int col, t_map *map)
 	if (c != '1' && c != ' ')
 	{
 		if (col == 0 || row == 0 || col == map->n_cols - 1 || row ==
-															  map->n_rows - 1)
+															  map->n_rows - 1) {
 			return (0);
 		}
-	else
+		else
 		{
 			if (get_pos_value(map, row - 1, col) == ' ')
 			{
@@ -165,9 +165,12 @@ int valid(char c, int row, int col, t_map *map)
 				printf("right\n");
 				return (0);
 			}
-			if (c != '0' && c != '2' && c != 'N' && c != 'S' && c != 'E' && c
-																			!=
-																			'W')
+			if (c != '0' && \
+				c != '2' && \
+				c != 'N' && \
+				c != 'S' && \
+				c != 'E' && \
+				c != 'W')
 			{
 				printf("wrong char\n");
 				return (0);
@@ -263,12 +266,12 @@ t_map *init_map(const char *filepath)
 
 int read_resolution(t_map *map, int fd)
 {
-	char width[10];
-	char height[10];
+	//char width[10];
+	//char height[10];
 	char c;
 
-	width[0] = '\0';
-	height[0] = '\0';
+	//width[0] = '\0';
+	//height[0] = '\0';
 	if (!read(fd, &c, 1))
 		return (0);
 	if (c != 'R')

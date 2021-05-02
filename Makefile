@@ -2,6 +2,7 @@ SRCS			=	main.c\
 					map_file_parse.c \
 					map_print.c		 \
 					map_get_set.c	 \
+					map_parse.c		\
 					libft/ft_atoi.c	 \
 					libft/ft_isdigit.c \
 					libft/ft_strlen.c	\

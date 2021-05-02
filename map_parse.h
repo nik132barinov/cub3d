@@ -7,9 +7,9 @@
 
 #define VIEW_ANGLE_X 70
 #define ANGLE_FRACTIONS 180
-enum e_orient{
+typedef enum	e_orient{
 	right, down, left, up
-};
+}		e_orient;
 
 typedef struct	s_quant_view
 {
@@ -35,10 +35,16 @@ t_quant_view *qv_array;
 void create_view_line(t_view *view, int beam_id, double angle);
 void create_line(t_view *view, double angle, t_line *line);
 int compare_angles(double angle1, double angle2);
-t_view *create_view(int i, int j, double direction, t_map *map);
+char find_cam_pos(t_map *map, t_point *point);
+void create_view(int i, int j, double direction, t_map *map);
 void update_view(int i, int j, double direction, t_map *map);
 void create_quant_view_array();
 void reset_qv_array();
+double get_initial_direction(char c);
+void view_print(t_view *view);
+void point_print(t_point *point);
+void line_print(t_line *line);
+void qv_show(t_quant_view qv);
 t_point *step_intersect(t_line line, double angle, int step, t_view *view);
 int i_angle(double angle);
 void go(t_point cur_p, t_point end_p, int step, int i_prev_qv, t_map *map);
