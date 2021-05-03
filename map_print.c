@@ -1,11 +1,13 @@
 #include "cub3d.h"
 #include <stdio.h>
 
-void map_print(t_map *map)
+void	map_print(t_map *map)
 {
-	int row = 0;
-	int col = 0;
+	int	row;
+	int	col;
 
+	row = 0;
+	col = 0;
 	printf("n_rows = %d, n_cols = %d\n", map->n_rows, map->n_cols);
 	while (row < map -> n_rows)
 	{
@@ -18,5 +20,4 @@ void map_print(t_map *map)
 		row++;
 		printf("\n");
 	}
-
 }

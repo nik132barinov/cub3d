@@ -4,17 +4,17 @@
 #include <stdlib.h>
 #include "map_file_parse.h"
 
-t_map *map_file_parse(const char *filepath)
+t_map	*map_file_parse(const char *filepath)//todo-me функия длиннее 25 стр
 {
-	int fd;
-	t_map *map;
-	char c;
+	int		fd;
+	t_map	*map;
+	char	c;
 
 	map = init_map(filepath);
 	if (!map)
-		return NULL;
+		return (NULL);
 	map->map = malloc(sizeof(char) * map->n_rows * map->n_cols);
-	if ((fd = open(filepath, O_RDONLY)) == -1)
+	if ((fd = open(filepath, O_RDONLY)) == -1) //todo-me вынести присваивание
 	{
 		free(map);
 		perror("failed to open file");
@@ -100,13 +100,16 @@ t_map *map_file_parse(const char *filepath)
 	return (map);
 }
 
-int validate(t_map *map)
+int		validate(t_map *map)  //todo-me функция больше 25 стр
 {
-	int cnt_dir = 0;
-	int row = 0;
-	int col = 0;
-	char c;
+	int		cnt_dir;
+	int		row;
+	int		col;
+	char	c;
 
+	cnt_dir = 0;
+	row = 0;
+	col = 0;
 	//printf("n_rows = %i, n_cols = %i\n", map->n_rows, map->n_cols);
 	while (row < map->n_rows)
 	{
@@ -120,7 +123,6 @@ int validate(t_map *map)
 				printf("cnt_dir > 1\n");
 				return (0);
 			}
-
 			if (!valid(c, row, col, map))
 			{
 				printf("cell not valid: %i, %i, %c\n", row, col, c);
@@ -134,15 +136,13 @@ int validate(t_map *map)
 	return (1);
 }
 
-
-int valid(char c, int row, int col, t_map *map)
+int	valid(char c, int row, int col, t_map *map)//todo-me функция больше 25 стр
 {
 	if (c != '1' && c != ' ')
 	{
-		if (col == 0 || row == 0 || col == map->n_cols - 1 || row ==
-															  map->n_rows - 1) {
+		if (col == 0 || row == 0 || col == map->n_cols - 1
+			|| row ==map->n_rows - 1)
 			return (0);
-		}
 		else
 		{
 			if (get_pos_value(map, row - 1, col) == ' ')
@@ -181,14 +181,15 @@ int valid(char c, int row, int col, t_map *map)
 	return (1);
 }
 
-
-t_map *get_map_size(int fd)
+t_map	*get_map_size(int fd)//todo-me функция больше 25 стр
 {
-	t_map *map;
-	char c;
-	int col_len = 0;
-	int row_len = 0;
+	t_map	*map;
+	char	c;
+	int		col_len;
+	int		row_len;
 
+	col_len = 0;
+	row_len = 0;
 	map = malloc(sizeof(t_map));
 	map->n_rows = 0;
 	map->n_cols = 0;
@@ -201,7 +202,7 @@ t_map *get_map_size(int fd)
 				map->n_cols = row_len;
 			row_len = 0;
 			col_len++;
-			continue;
+			continue ;
 		}
 		row_len++;
 	}
@@ -210,11 +211,14 @@ t_map *get_map_size(int fd)
 	return (map);
 }
 
-void read_map(t_map *map, int fd)
+void	read_map(t_map *map, int fd)//todo-me функция больше 25 стр
 {
-	int c;
-	int col = 0;
-	int row = 0;
+	int	c;
+	int	col;
+	int	row;
+
+	col = 0;
+	row = 0;
 	while (read(fd, &c, 1))
 	{
 		if (c == '\n')
@@ -226,7 +230,7 @@ void read_map(t_map *map, int fd)
 			}
 			row++;
 			col = 0;
-			continue;
+			continue ;
 		}
 		set_pos_value(map, row, col, c);
 		col++;
@@ -238,13 +242,14 @@ void read_map(t_map *map, int fd)
 	}
 }
 
-t_map *init_map(const char *filepath)
+t_map	*init_map(const char *filepath)
 {
-	t_map *map;
-	int fd;
-	int skip_lines;
-	char c;
-	if ((fd = open(filepath, O_RDONLY)) == -1)
+	t_map	*map;
+	int		fd;
+	int		skip_lines;
+	char	c;
+
+	if ((fd = open (filepath, O_RDONLY)) == -1) //todo-me убрать присваивание
 	{
 		perror("failed to open file");
 		return (NULL);
@@ -252,10 +257,10 @@ t_map *init_map(const char *filepath)
 	skip_lines = 0;
 	while (skip_lines < 10)
 	{
-		while(read(fd, &c, 1))
+		while (read(fd, &c, 1))
 		{
 			if (c == '\n')
-				break;
+				break ;
 		}
 		skip_lines++;
 	}
@@ -264,11 +269,11 @@ t_map *init_map(const char *filepath)
 	return (map);
 }
 
-int read_resolution(t_map *map, int fd)
+int	read_resolution(t_map *map, int fd)
 {
+	char	c;
 	//char width[10];
 	//char height[10];
-	char c;
 
 	//width[0] = '\0';
 	//height[0] = '\0';
@@ -289,17 +294,17 @@ int read_resolution(t_map *map, int fd)
 	return (1);
 }
 
-int read_num(int fd)
+int	read_num(int fd)
 {
-	char c;
-	char width[10];
-	int i;
+	char	c;
+	char	width[10];
+	int		i;
 
 	i = 0;
 	while (read(fd, &c, 1))
 	{
 		if (!ft_isdigit(c))
-			break;
+			break ;
 		if (i == 9)
 			return (-1);
 		if (ft_isdigit(c))
@@ -307,29 +312,29 @@ int read_num(int fd)
 			width[i] = c;
 			width[i + 1] = '\0';
 			i++;
-			continue;
+			continue ;
 		}
 		return (-1);
 	}
 	if (i == 0)
 		return (-1);
-	return  (ft_atoi(width));
+	return (ft_atoi(width));
 }
 
-char *read_path(int fd)
+char	*read_path(int fd)//todo-me функция больше 25 стр
 {
-	char buff[255];
-	char *path;
-	char c;
-	int i;
-	int size;
+	char	buff[255];
+	char	*path;
+	char	c;
+	int		i;
+	int		size;
 
 	buff[0] = '\0';
 	i = 0;
 	while (read(fd, &c, 1))
 	{
 		if (c == '\n' || i == 255)
-			break;
+			break ;
 		buff[i] = c;
 		i++;
 		buff[i] = '\0';
@@ -346,9 +351,10 @@ char *read_path(int fd)
 	return (path);
 }
 
-int read_north(t_map *map, int fd)
+int	read_north(t_map *map, int fd)
 {
-	char buff[3];
+	char	buff[3];
+
 	if (read(fd, buff, 3) != 3)
 		return (0);
 	if (buff[0] != 'N' || buff[1] != 'O' || buff[2] != ' ')
@@ -363,9 +369,10 @@ int read_north(t_map *map, int fd)
 	return (0);
 }
 
-int read_south(t_map *map, int fd)
+int	read_south(t_map *map, int fd)
 {
-	char buff[3];
+	char	buff[3];
+
 	if (read(fd, buff, 3) != 3)
 		return (0);
 	if (buff[0] != 'S' || buff[1] != 'O' || buff[2] != ' ')
@@ -380,9 +387,10 @@ int read_south(t_map *map, int fd)
 	return (0);
 }
 
-int read_west(t_map *map, int fd)
+int	read_west(t_map *map, int fd)
 {
-	char buff[3];
+	char	buff[3];
+
 	if (read(fd, buff, 3) != 3)
 		return (0);
 	if (buff[0] != 'W' || buff[1] != 'E' || buff[2] != ' ')
@@ -397,9 +405,10 @@ int read_west(t_map *map, int fd)
 	return (0);
 }
 
-int read_east(t_map *map, int fd)
+int	read_east(t_map *map, int fd)
 {
-	char buff[3];
+	char	buff[3];
+
 	if (read(fd, buff, 3) != 3)
 		return (0);
 	if (buff[0] != 'E' || buff[1] != 'A' || buff[2] != ' ')
@@ -414,10 +423,11 @@ int read_east(t_map *map, int fd)
 	return (0);
 }
 
-int read_sprite(t_map *map, int fd)
+int	read_sprite(t_map *map, int fd)
 {
-	char buff[2];
-	char c;
+	char	buff[2];
+	char	c;
+
 	if (read(fd, &c, 1) != 1)
 		return (0);
 	if (c != '\n')
@@ -436,10 +446,10 @@ int read_sprite(t_map *map, int fd)
 	return (0);
 }
 
-int read_color(int fd, unsigned char *color)
+int	read_color(int fd, unsigned char *color)
 {
-	int num;
-	char c;
+	int		num;
+	char	c;
 
 	num = read_num(fd);
 	if (num < 0 || num > 255)
@@ -449,7 +459,6 @@ int read_color(int fd, unsigned char *color)
 		return (0);
 	if (c != ' ')
 		return (0);
-
 	num = read_num(fd);
 	if (num < 0 || num > 255)
 		return (0);
@@ -458,18 +467,17 @@ int read_color(int fd, unsigned char *color)
 		return (0);
 	if (c != ' ')
 		return (0);
-
 	num = read_num(fd);
 	if (num < 0 || num > 255)
 		return (0);
 	color[2] = num;
-
 	return (1);
 }
 
-int read_floor(t_map *map, int fd)
+int	read_floor(t_map *map, int fd)
 {
-	char buff[2];
+	char	buff[2];
+
 	if (read(fd, buff, 2) != 2)
 		return (0);
 	if (buff[0] != 'F' || buff[1] != ' ')
@@ -479,9 +487,10 @@ int read_floor(t_map *map, int fd)
 	return (1);
 }
 
-int read_ceiling(t_map *map, int fd)
+int	read_ceiling(t_map *map, int fd)
 {
-	char buff[2];
+	char	buff[2];
+
 	if (read(fd, buff, 2) != 2)
 		return (0);
 	if (buff[0] != 'C' || buff[1] != ' ')

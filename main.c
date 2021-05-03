@@ -8,7 +8,7 @@
 
 int     main(void)
 {
-//	void    *mlx;
+//	void    *ml
 //	void    *mlx_win;
 //	void	*img;
 //	int height;
