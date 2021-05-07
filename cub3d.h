@@ -5,6 +5,7 @@
 #ifndef CUB3D_CUB3D_H
 #define CUB3D_CUB3D_H
 #include "libft/libft.h"
+#include "mlx/mlx.h"
 
 typedef struct	s_line
 {
@@ -45,8 +46,35 @@ typedef struct		s_map
 	t_view			*view;
 }					t_map;
 
+typedef struct s_img_data
+{
+	void *img;
+	char *addr;
+	int bbp;
+	int line_size;
+	int endian;
+	int width;
+	int height;
+}				t_img_data;
+
+typedef struct	s_cub3d_info
+{
+	t_map *map;
+	t_img_data *data;
+}				t_cub3d_info;
+
+typedef struct	s_mlx_data
+{
+	void *mlx;
+	void *win;
+	t_cub3d_info info;
+}				t_mlx_data;
+
+
 void set_pos_value(t_map *map, int row, int col, char value);
 char get_pos_value(t_map *map, int row, int col);
 void map_print(t_map *map);
+void launch_cub3d(char *map_filename, int save);
+
 
 #endif //CUB3D_CUB3D_H
