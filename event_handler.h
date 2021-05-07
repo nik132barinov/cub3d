@@ -21,6 +21,4 @@
 int key_handler(int key, t_mlx_data *data);
 int exit_key(t_mlx_data *data);
 
-
-
 #endif //CUB3D_EVENT_HANDLER_H

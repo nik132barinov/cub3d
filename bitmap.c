@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <sys/fcntl.h>
 
-void	ft_bdata(t_mlx_data *mlx_data, int fd)
+void	ft_bitmap_data(t_cub3d_info *info, int fd)
 {
 	int				i;
 	int				j;
@@ -14,17 +14,17 @@ void	ft_bdata(t_mlx_data *mlx_data, int fd)
 	int width;
 	int height;
 
-	width = mlx_data->info.map->width;
-	height = mlx_data->info.map->height;
+	width = info->map->width;
+	height = info->map->height;
 	i = width * (height - 1);
 	while (i >= 0)
 	{
 		j = 0;
 		while (j < width)
 		{
-			buffer[0] = (unsigned char)(mlx_data->info.data->addr[i] % 256);
-			buffer[1] = (unsigned char)(mlx_data->info.data->addr[i] / 256 % 256);
-			buffer[2] = (unsigned char)(mlx_data->info.data->addr[i] / 256 / 256 % 256);
+			buffer[0] = (unsigned char)(info->data->addr[i] % 256);
+			buffer[1] = (unsigned char)(info->data->addr[i] / 256 % 256);
+			buffer[2] = (unsigned char)(info->data->addr[i] / 256 / 256 % 256);
 			buffer[3] = (unsigned char)(0);
 			write(fd, buffer, 4);
 			i++;
@@ -34,7 +34,7 @@ void	ft_bdata(t_mlx_data *mlx_data, int fd)
 	}
 }
 
-void	ft_binfo(t_map *map, int fd)
+void	ft_bitmap_info(t_map *map, int fd)
 {
 	int				n;
 	unsigned char	header[40];
@@ -58,7 +58,7 @@ void	ft_binfo(t_map *map, int fd)
 	write(fd, header, 40);
 }
 
-void	ft_bfile(t_map *map, int fd)
+void	ft_bitmap_file(t_map *map, int fd)
 {
 	int				n;
 	unsigned char	header[14];
@@ -77,15 +77,14 @@ void	ft_bfile(t_map *map, int fd)
 	write(fd, header, 14);
 }
 
-int		ft_bitmap(t_mlx_data *mlx_data)
+int		ft_bitmap(t_cub3d_info *info)
 {
 	int		fd;
 
 	fd = open("bitmap.bmp", O_CREAT | O_WRONLY | O_TRUNC, S_IRWXU);
-	ft_bfile(mlx_data->info.map, fd);
-	ft_binfo(mlx_data->info.map, fd);
-	ft_bdata(mlx_data, fd);
+	ft_bitmap_file(info->map, fd);
+	ft_bitmap_info(info->map, fd);
+	ft_bitmap_data(info, fd);
 	close(fd);
-	//todo почистить память и разрушить окно free_mlx_data.c
 	return (1);
 }

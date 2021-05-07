@@ -17,7 +17,7 @@ int read_south(t_map *map, int fd);
 int read_west(t_map *map, int fd);
 int read_east(t_map *map, int fd);
 int read_sprite(t_map *map, int fd);
-int read_color(int fd, unsigned char *color);
+int read_color(int fd, int *color);
 int read_floor(t_map *map, int fd);
 int read_ceiling(t_map *map, int fd);
 

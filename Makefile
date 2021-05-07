@@ -4,10 +4,14 @@ SRCS			=	main.c\
 					map_get_set.c	 \
 					map_parse.c		\
 					render.c		\
+					free_mlx_data.c	\
+					bitmap.c		\
 					event_handler.c	\
+					cub3d.c			\
 					libft/ft_atoi.c	 \
 					libft/ft_isdigit.c \
 					libft/ft_strlen.c	\
+					libft/ft_strncmp.c	\
 
 OBJS			= $(SRCS:.c=.o)
 

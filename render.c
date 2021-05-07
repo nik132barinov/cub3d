@@ -54,7 +54,7 @@ void my_mlx_pixel_put(t_img_data *data, int x, int y, int color)
 	*(unsigned int *)dst = color;
 }
 
-void	create_sprite_area(t_stripe *stripe, int i_qv)
+void	create_sprite_area(t_stripe *stripe, int i_qv) //todo 25 lines
 {
 	double sum_height;
 
@@ -120,7 +120,7 @@ int get_color_from_texture_by_pos(t_img_data *tex_img, t_stripe *stripe,
 //	printf("imgx = %i, imgy = %i\n", img_ix, img_iy);
 //	printf("tex_img_h = %i, tex_img_w = %i\n", tex_img->height, tex_img->width);
 	return  (color);
-}
+} //todo comments
 
 int get_color_from_img(t_img_data *data, int ix, int iy)
 {
@@ -132,7 +132,7 @@ int get_color_from_img(t_img_data *data, int ix, int iy)
 	return (color);
 }
 
-void render_stripe_to_img(t_img_data *data, t_stripe *stripe)
+void render_stripe_to_img(t_mlx_data *data, t_stripe *stripe) //todo 25 lines
 {
 	int ix;
 	int iy;
@@ -149,8 +149,8 @@ void render_stripe_to_img(t_img_data *data, t_stripe *stripe)
 		iy = 0;
 		while (iy < stripe->ceil_height)
 		{
-			color = CEIL_COLOR;
-			my_mlx_pixel_put(data, ix, iy, color);
+			color = data->info.map->ceiling;
+			my_mlx_pixel_put(data->info.data, ix, iy, color);
 			iy++;
 		}
 
@@ -161,13 +161,13 @@ void render_stripe_to_img(t_img_data *data, t_stripe *stripe)
 			texture = get_img_by_stripe(stripe);
 			color = get_color_from_texture_by_pos(texture, stripe,
 										 &stripe_cords);
-			my_mlx_pixel_put(data, ix, iy, color);
+			my_mlx_pixel_put(data->info.data, ix, iy, color);
 			iy++;
 		}
 		while (iy < stripe_height)
 		{
-			color = FLOOR_COLOR;
-			my_mlx_pixel_put(data, ix, iy, color);
+			color = data->info.map->floor;
+			my_mlx_pixel_put(data->info.data, ix, iy, color);
 			iy++;
 		}
 		ix++;
@@ -208,7 +208,7 @@ void set_stripe_ix_start_end(t_stripe *stripe, int i_qv, t_map *map)
 	stripe->ix_end = ix_end;
 }
 
-void render_qv_array_to_img(t_img_data *data, t_map *map)
+void render_qv_array_to_img(t_mlx_data *data, t_map *map)
 {
 	int i_qv;
 	t_stripe stripe;
@@ -223,7 +223,7 @@ void render_qv_array_to_img(t_img_data *data, t_map *map)
 
 }
 
-t_img_data *create_img_data(t_mlx_data *mlx_data, t_map *map)
+void create_img_data(t_mlx_data *mlx_data, t_map *map)
 {
 	t_img_data *data;
 
@@ -231,38 +231,37 @@ t_img_data *create_img_data(t_mlx_data *mlx_data, t_map *map)
 	data->img = mlx_new_image(mlx_data->mlx, map->width, map->height);
 	data->addr = mlx_get_data_addr(data->img, &data->bbp, &data->line_size,
 								&data->endian);
-	update_img_data(data, map);
-	return (data);
+	mlx_data->info.data = data;
+	update_img_data(mlx_data, map);
 }
 
-void update_img_data(t_img_data *data, t_map *map)
+void update_img_data(t_mlx_data *data, t_map *map)
 {
 	render_qv_array_to_img(data, map);
 }
 
-void create_textures(void *mlx)
+void create_textures(t_mlx_data *data)
 {
-	textures.wall_n = create_texture(mlx, "brick_1.xpm");
-	textures.wall_s = create_texture(mlx, "brick_1.xpm");
-	textures.wall_e = create_texture(mlx, "brick_1.xpm");
-	textures.wall_w = create_texture(mlx, "brick_1.xpm");
-	textures.sprite2 = create_texture(mlx, "wall_tex.xpm");
-	textures.sprite3 = create_texture(mlx, "wall_tex.xpm");
+	textures.wall_n = create_texture(data->mlx, data->info.map->no);
+	textures.wall_e = create_texture(data->mlx, data->info.map->ea);
+	textures.wall_s = create_texture(data->mlx, data->info.map->so);
+	textures.wall_w = create_texture(data->mlx, data->info.map->we);
+	textures.sprite2 = create_texture(data->mlx, data->info.map->sprite);
 }
 
 t_img_data *create_texture(void *mlx, char *filename)
 {
 	t_img_data *texture;
 
+	printf("%s\n", filename);
 	texture = malloc(sizeof(t_img_data));
 	texture->img = mlx_xpm_file_to_image(mlx, filename, &texture->width,
 									  &texture->height);
+	if (!texture->img)
+		perror("Texture cannot be read\n");
 	texture->addr = mlx_get_data_addr(texture->img, &texture->bbp,
 								   &texture->line_size, &texture->endian);
 	return (texture);
 }
-//мод структуру и кв
-// отрисовки 2 функции (1 в клетке и страйп со спрайтом)
-
 
 

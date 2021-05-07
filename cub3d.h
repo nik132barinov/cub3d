@@ -40,8 +40,8 @@ typedef struct		s_map
 	char 			*we;
 	char 			*ea;
 	char 			*sprite;
-	unsigned char	floor[3];
-	unsigned char 	ceiling[3];
+	int				floor;
+	int			 	ceiling;
 	char			*map;
 	t_view			*view;
 }					t_map;
@@ -71,10 +71,11 @@ typedef struct	s_mlx_data
 }				t_mlx_data;
 
 
+
 void set_pos_value(t_map *map, int row, int col, char value);
 char get_pos_value(t_map *map, int row, int col);
 void map_print(t_map *map);
-void launch_cub3d(char *map_filename, int save);
-
+void launch_cub3d(char *map_filename);
+void save_bitmap(char *map_filename);
 
 #endif //CUB3D_CUB3D_H

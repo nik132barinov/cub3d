@@ -56,13 +56,13 @@ int get_color_from_texture_by_pos(t_img_data *tex_img, t_stripe *stripe,
 								  t_stripe_cords *stripe_cords);
 int get_color_from_img(t_img_data *data, int ix, int iy);
 void set_stripe_ix_start_end(t_stripe *stripe, int i_qv, t_map *map);
-void render_stripe_to_img(t_img_data *data, t_stripe *stripe);
+void render_stripe_to_img(t_mlx_data *data, t_stripe *stripe);
 t_img_data *get_img_by_stripe(t_stripe *stripe);
-void render_qv_array_to_img(t_img_data *data, t_map *map);
-t_img_data *create_img_data(t_mlx_data *mlx_data, t_map *map);
-void update_img_data(t_img_data *data, t_map *map);
+void render_qv_array_to_img(t_mlx_data *data, t_map *map);
+void create_img_data(t_mlx_data *mlx_data, t_map *map);
+void update_img_data(t_mlx_data *data, t_map *map);
 t_img_data *create_texture(void *mlx, char *filename);
-void create_textures(void *mlx);
+void create_textures(t_mlx_data *data);
 void print_stripe(t_stripe *stripe);
 
 

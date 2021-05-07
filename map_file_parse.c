@@ -17,63 +17,64 @@ t_map *map_file_parse(const char *filepath)
 	if ((fd = open(filepath, O_RDONLY)) == -1)
 	{
 		free(map);
-		perror("failed to open file");
+		perror("failed to open .cub file");
 		return (NULL);
 	}
 	if (!(read_resolution(map, fd)))
 	{
 		printf("R\n");
 		free(map);
-		perror("map file is not valid");
+		perror("resolution is not valid");
 		return (NULL);
 	}
 	if (!(read_north(map, fd)))
 	{
 		printf("NO\n");
 		free(map);
-		perror("map file is not valid");
-		return (NULL);
-	}
-	if (!(read_south(map, fd)))
-	{
-		printf("SO\n");
-		free(map);
-		perror("map file is not valid");
-		return (NULL);
-	}
-	if (!(read_west(map, fd)))
-	{
-		printf("WE\n");
-		free(map);
-		perror("map file is not valid");
+		perror("North texture path is not valid");
 		return (NULL);
 	}
 	if (!(read_east(map, fd)))
 	{
 		printf("EA\n");
 		free(map);
-		perror("map file is not valid");
+		perror("East texture path is not valid");
 		return (NULL);
 	}
+	if (!(read_south(map, fd)))
+	{
+		printf("SO\n");
+		free(map);
+		perror("South texture path is not valid");
+		return (NULL);
+	}
+	if (!(read_west(map, fd)))
+	{
+		printf("WE\n");
+		free(map);
+		perror("West texture path is not valid");
+		return (NULL);
+	}
+
 	if (!(read_sprite(map, fd)))
 	{
 		printf("S\n");
 		free(map);
-		perror("map file is not valid");
+		perror("Sprite texture path is not valid");
 		return (NULL);
 	}
 	if (!(read_floor(map, fd)))
 	{
 		printf("F\n");
 		free(map);
-		perror("map file is not valid");
+		perror("Floor is not valid");
 		return (NULL);
 	}
 	if (!(read_ceiling(map, fd)))
 	{
 		printf("C\n");
 		free(map);
-		perror("map file is not valid");
+		perror("Ceiling is not valid");
 		return (NULL);
 	}
 	if (read(fd, &c, 1) != 1)
@@ -354,12 +355,14 @@ int read_north(t_map *map, int fd)
 	if (buff[0] != 'N' || buff[1] != 'O' || buff[2] != ' ')
 		return (0);
 	map->no = read_path(fd);
-	if (ft_strlen(map->no) > 3)
-	{
-		if (map->no[0] == '.' || map->no[1] == '/')
-			return (1);
-		return (0);
-	}
+//	if (ft_strlen(map->no) > 3)
+//	{
+//		if (map->no[0] == '.' || map->no[1] == '/')
+//			return (1);
+//		return (0);
+//	}
+	if (map->no)
+		return (1);
 	return (0);
 }
 
@@ -371,12 +374,14 @@ int read_south(t_map *map, int fd)
 	if (buff[0] != 'S' || buff[1] != 'O' || buff[2] != ' ')
 		return (0);
 	map->so = read_path(fd);
-	if (ft_strlen(map->so) > 3)
-	{
-		if (map->so[0] == '.' || map->so[1] == '/')
-			return (1);
-		return (0);
-	}
+//	if (ft_strlen(map->so) > 3)
+//	{
+//		if (map->so[0] == '.' || map->so[1] == '/')
+//			return (1);
+//		return (0);
+//	}
+	if (map->so)
+		return (1);
 	return (0);
 }
 
@@ -388,12 +393,14 @@ int read_west(t_map *map, int fd)
 	if (buff[0] != 'W' || buff[1] != 'E' || buff[2] != ' ')
 		return (0);
 	map->we = read_path(fd);
-	if (ft_strlen(map->we) > 3)
-	{
-		if (map->we[0] == '.' || map->we[1] == '/')
-			return (1);
-		return (0);
-	}
+//	if (ft_strlen(map->we) > 3)
+//	{
+//		if (map->we[0] == '.' || map->we[1] == '/')
+//			return (1);
+//		return (0);
+//	}
+	if (map->we)
+		return (1);
 	return (0);
 }
 
@@ -405,12 +412,14 @@ int read_east(t_map *map, int fd)
 	if (buff[0] != 'E' || buff[1] != 'A' || buff[2] != ' ')
 		return (0);
 	map->ea = read_path(fd);
-	if (ft_strlen(map->ea) > 3)
-	{
-		if (map->ea[0] == '.' || map->ea[1] == '/')
-			return (1);
-		return (0);
-	}
+//	if (ft_strlen(map->ea) > 3)
+//	{
+//		if (map->ea[0] == '.' || map->ea[1] == '/')
+//			return (1);
+//		return (0);
+//	}
+	if (map->ea)
+		return (1);
 	return (0);
 }
 
@@ -427,24 +436,28 @@ int read_sprite(t_map *map, int fd)
 	if (buff[0] != 'S' || buff[1] != ' ')
 		return (0);
 	map->sprite = read_path(fd);
-	if (ft_strlen(map->sprite) > 3)
-	{
-		if (map->sprite[0] == '.' || map->sprite[1] == '/')
-			return (1);
-		return (0);
-	}
+//	if (ft_strlen(map->sprite) > 3)
+//	{
+//		if (map->sprite[0] == '.' || map->sprite[1] == '/')
+//			return (1);
+//		return (0);
+//	}
+	if (map->sprite)
+		return (1);
 	return (0);
 }
 
-int read_color(int fd, unsigned char *color)
+int read_color(int fd, int *color)
 {
 	int num;
 	char c;
 
+	*color = 0;
 	num = read_num(fd);
 	if (num < 0 || num > 255)
 		return (0);
-	color[0] = num;
+	printf("num[0] = %i\n", num);
+	*color += num * 256 * 256;
 	if (!(read(fd, &c, 1)))
 		return (0);
 	if (c != ' ')
@@ -453,7 +466,8 @@ int read_color(int fd, unsigned char *color)
 	num = read_num(fd);
 	if (num < 0 || num > 255)
 		return (0);
-	color[1] = num;
+	printf("num[1] = %i\n", num);
+	*color += num * 256;
 	if (!(read(fd, &c, 1)))
 		return (0);
 	if (c != ' ')
@@ -462,8 +476,9 @@ int read_color(int fd, unsigned char *color)
 	num = read_num(fd);
 	if (num < 0 || num > 255)
 		return (0);
-	color[2] = num;
-
+	printf("num[2] = %i\n", num);
+	*color += num;
+	printf("color = %i\n", *color);
 	return (1);
 }
 
@@ -474,7 +489,7 @@ int read_floor(t_map *map, int fd)
 		return (0);
 	if (buff[0] != 'F' || buff[1] != ' ')
 		return (0);
-	if (!(read_color(fd, map->floor)))
+	if (!(read_color(fd, &map->floor)))
 		return (0);
 	return (1);
 }
@@ -486,7 +501,10 @@ int read_ceiling(t_map *map, int fd)
 		return (0);
 	if (buff[0] != 'C' || buff[1] != ' ')
 		return (0);
-	if (!(read_color(fd, map->ceiling)))
+	if (!(read_color(fd, &map->ceiling)))
 		return (0);
 	return (1);
 }
+
+
+//todo масштабирование окна и обработка путей к текстурам через файл карты
