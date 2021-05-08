@@ -11,8 +11,8 @@ void	ft_bitmap_data(t_cub3d_info *info, int fd)
 	int				i;
 	int				j;
 	unsigned char	buffer[4];
-	int width;
-	int height;
+	int				width;
+	int				height;
 
 	width = info->map->width;
 	height = info->map->height;

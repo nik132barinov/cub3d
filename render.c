@@ -4,18 +4,16 @@
 
 #include "render.h"
 #include "map_parse.h"
-#include "map_file_parse.h"
 #include "cub3d.h"
 #include "mlx/mlx.h"
 #include <stdio.h>
 
-
-void create_stripe(t_stripe *stripe, int i_qv, t_map *map)
+void	create_stripe(t_stripe *stripe, int i_qv, t_map *map)
 {
-	double visible_dist;
-	double visible_height;
-	double floor_height;
-	double ceil_height;
+	double	visible_dist;
+	double	visible_height;
+	double	floor_height;
+	double	ceil_height;
 
 	visible_dist = cos(qv_array[i_qv].angle - map->view->direction) *
 			qv_array[i_qv].dist * CELL_LENGTH;
@@ -38,7 +36,7 @@ void create_stripe(t_stripe *stripe, int i_qv, t_map *map)
 	set_stripe_ix_start_end(stripe, i_qv, map);
 }
 
-void print_stripe(t_stripe *stripe)
+void	print_stripe(t_stripe *stripe)
 {
 	printf("ch = %i, wh = %i, fh = %i, vs = %f, hs = %f, ve = %f, he = %f, "
 		"ray_dir = %i, ixs = %i, ixe = %i, ct = %c\n", stripe->ceil_height,
@@ -47,16 +45,17 @@ void print_stripe(t_stripe *stripe)
 		stripe->ray_dir, stripe->ix_start, stripe->ix_end, stripe->cell_type);
 }
 
-void my_mlx_pixel_put(t_img_data *data, int x, int y, int color)
+void	my_mlx_pixel_put(t_img_data *data, int x, int y, int color)
 {
-	char *dst;
+	char	*dst;
+
 	dst = data->addr + (y * data->line_size + x * (data->bbp / 8));
 	*(unsigned int *)dst = color;
 }
 
 void	create_sprite_area(t_stripe *stripe, int i_qv) //todo 25 lines
 {
-	double sum_height;
+	double	sum_height;
 
 	sum_height = stripe->ceil_height + stripe->wall_height +
 			stripe->floor_height;
@@ -102,44 +101,40 @@ void	create_sprite_area(t_stripe *stripe, int i_qv) //todo 25 lines
 	}
 }
 
-int get_color_from_texture_by_pos(t_img_data *tex_img, t_stripe *stripe,
+int	get_color_from_texture_by_pos(t_img_data *tex_img, t_stripe *stripe,
 								  t_stripe_cords *stripe_cords)
 {
-	int color;
-	int img_ix;
-	int img_iy;
+	int	color;
+	int	img_ix;
+	int	img_iy;
 
-//	img_ix = (int)trunc(((double) (stripe_cords->ix) / (stripe->ix_end -
-//			stripe->ix_start)) * tex_img->width);
 	img_ix = (int) trunc(stripe->hor_start + (double)stripe_cords->ix /
 			(stripe->ix_end - stripe->ix_start) * (stripe->hor_end -
 			stripe->hor_start) * tex_img->width);
 	img_iy = (int)trunc(((double) (stripe_cords->iy - stripe->ceil_height) /
 			stripe->wall_height) * tex_img->height);
 	color = get_color_from_img(tex_img, img_ix, img_iy);
-//	printf("imgx = %i, imgy = %i\n", img_ix, img_iy);
-//	printf("tex_img_h = %i, tex_img_w = %i\n", tex_img->height, tex_img->width);
 	return  (color);
-} //todo comments
+}
 
-int get_color_from_img(t_img_data *data, int ix, int iy)
+int	get_color_from_img(t_img_data *data, int ix, int iy)
 {
-	int pos;
-	int color;
+	int	pos;
+	int	color;
 
 	pos = iy * data->line_size + ix * (data->bbp / 8);
 	color = *(int *)(data->addr + pos);
 	return (color);
 }
 
-void render_stripe_to_img(t_mlx_data *data, t_stripe *stripe) //todo 25 lines
+void	render_stripe_to_img(t_mlx_data *data, t_stripe *stripe) //todo 25 lines
 {
-	int ix;
-	int iy;
-	int stripe_height;
-	t_stripe_cords stripe_cords;
-	t_img_data *texture;
-	int color;
+	int				ix;
+	int				iy;
+	int				stripe_height;
+	t_stripe_cords	stripe_cords;
+	t_img_data		*texture;
+	int				color;
 
 	stripe_height = stripe->ceil_height + stripe->wall_height +
 			stripe->floor_height;
@@ -153,7 +148,6 @@ void render_stripe_to_img(t_mlx_data *data, t_stripe *stripe) //todo 25 lines
 			my_mlx_pixel_put(data->info.data, ix, iy, color);
 			iy++;
 		}
-
 		while (iy < stripe_height - stripe->floor_height)
 		{
 			stripe_cords.ix = ix - stripe->ix_start;
@@ -174,9 +168,9 @@ void render_stripe_to_img(t_mlx_data *data, t_stripe *stripe) //todo 25 lines
 	}
 }
 
-t_img_data *get_img_by_stripe(t_stripe *stripe)
+t_img_data	*get_img_by_stripe(t_stripe *stripe)
 {
-	t_img_data *data;
+	t_img_data	*data;
 
 	data = NULL;
 	if (stripe->cell_type == '1')
@@ -197,10 +191,10 @@ t_img_data *get_img_by_stripe(t_stripe *stripe)
 	return (data);
 }
 
-void set_stripe_ix_start_end(t_stripe *stripe, int i_qv, t_map *map)
+void	set_stripe_ix_start_end(t_stripe *stripe, int i_qv, t_map *map)
 {
-	int ix_start;
-	int ix_end;
+	int	ix_start;
+	int	ix_end;
 
 	ix_start = (int)(((double)(i_qv - 1) / (ANGLE_FRACTIONS - 1)) * map->width);
 	ix_end = (int)(((double)(i_qv) / (ANGLE_FRACTIONS - 1)) * map->width);
@@ -208,10 +202,10 @@ void set_stripe_ix_start_end(t_stripe *stripe, int i_qv, t_map *map)
 	stripe->ix_end = ix_end;
 }
 
-void render_qv_array_to_img(t_mlx_data *data, t_map *map)
+void	render_qv_array_to_img(t_mlx_data *data, t_map *map)
 {
-	int i_qv;
-	t_stripe stripe;
+	int			i_qv;
+	t_stripe	stripe;
 
 	i_qv = 1;
 	while (i_qv < ANGLE_FRACTIONS)
@@ -223,9 +217,9 @@ void render_qv_array_to_img(t_mlx_data *data, t_map *map)
 
 }
 
-void create_img_data(t_mlx_data *mlx_data, t_map *map)
+void	create_img_data(t_mlx_data *mlx_data, t_map *map)
 {
-	t_img_data *data;
+	t_img_data	*data;
 
 	data = malloc(sizeof(t_img_data));
 	data->img = mlx_new_image(mlx_data->mlx, map->width, map->height);
@@ -235,12 +229,12 @@ void create_img_data(t_mlx_data *mlx_data, t_map *map)
 	update_img_data(mlx_data, map);
 }
 
-void update_img_data(t_mlx_data *data, t_map *map)
+void	update_img_data(t_mlx_data *data, t_map *map)
 {
 	render_qv_array_to_img(data, map);
 }
 
-void create_textures(t_mlx_data *data)
+void	create_textures(t_mlx_data *data)
 {
 	textures.wall_n = create_texture(data->mlx, data->info.map->no);
 	textures.wall_e = create_texture(data->mlx, data->info.map->ea);
@@ -249,9 +243,9 @@ void create_textures(t_mlx_data *data)
 	textures.sprite2 = create_texture(data->mlx, data->info.map->sprite);
 }
 
-t_img_data *create_texture(void *mlx, char *filename)
+t_img_data	*create_texture(void *mlx, char *filename)
 {
-	t_img_data *texture;
+	t_img_data	*texture;
 
 	printf("%s\n", filename);
 	texture = malloc(sizeof(t_img_data));
@@ -264,4 +258,6 @@ t_img_data *create_texture(void *mlx, char *filename)
 	return (texture);
 }
 
-
+//todo ix = 15 iy = 10 segmentation fault
+//todo поменять цвет потолка на синий
+//todo конфиг файл может содержать любой порядок конфигов

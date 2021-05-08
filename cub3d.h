@@ -2,31 +2,31 @@
 // Created by Nikita on 24.03.2021.
 //
 
-#ifndef CUB3D_CUB3D_H
-#define CUB3D_CUB3D_H
-#include "libft/libft.h"
-#include "mlx/mlx.h"
+#ifndef CUB3D_H
+# define CUB3D_H
+# include "libft/libft.h"
+# include "mlx/mlx.h"
 
 typedef struct	s_line
 {
-	int n;
-	double k;
-	double m;
+	int			n;
+	double		k;
+	double		m;
 
 }				t_line;
 
 typedef  struct	s_view
 {
-	int i;  //indexes of pixels
-	int j;
-	double x0;
-	double y0;
-	double direction;  //directional angle
-	double start_angle;
-	double end_angle;
-	t_line beam[2];
-	double view_angle_x;
-	double view_angle_y;
+	int			i;  //indexes of pixels
+	int			j;
+	double		x0;
+	double		y0;
+	double		direction;  //directional angle
+	double		start_angle;
+	double		end_angle;
+	t_line		beam[2];
+	double		view_angle_x;
+	double		view_angle_y;
 }				t_view;
 
 typedef struct		s_map
@@ -48,34 +48,35 @@ typedef struct		s_map
 
 typedef struct s_img_data
 {
-	void *img;
-	char *addr;
-	int bbp;
-	int line_size;
-	int endian;
-	int width;
-	int height;
+	void	*img;
+	char	*addr;
+	int		bbp;
+	int		line_size;
+	int		endian;
+	int		width;
+	int		height;
 }				t_img_data;
 
 typedef struct	s_cub3d_info
 {
-	t_map *map;
-	t_img_data *data;
+	t_map		*map;
+	t_img_data	*data;
 }				t_cub3d_info;
 
 typedef struct	s_mlx_data
 {
-	void *mlx;
-	void *win;
-	t_cub3d_info info;
+	void			*mlx;
+	void			*win;
+	t_cub3d_info	info;
 }				t_mlx_data;
 
 
 
-void set_pos_value(t_map *map, int row, int col, char value);
-char get_pos_value(t_map *map, int row, int col);
-void map_print(t_map *map);
-void launch_cub3d(char *map_filename);
-void save_bitmap(char *map_filename);
+void	set_pos_value(t_map *map, int row, int col, char value);
+char	get_pos_value(t_map *map, int row, int col);
+void	map_print(t_map *map); //todo functions do not belong to this header
 
-#endif //CUB3D_CUB3D_H
+void	launch_cub3d(char *map_filename);
+void	save_bitmap(char *map_filename);
+
+#endif //CUB3D_H

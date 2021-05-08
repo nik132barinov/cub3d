@@ -3,16 +3,15 @@
 //
 
 #include "event_handler.h"
-#include "stdio.h"
 #include "free_mlx_data.h"
 
-int exit_key(t_mlx_data *data)
+int	exit_key(t_mlx_data *data)
 {
 	free_mlx_data(data);
 	exit(0);
 }
 
-int key_handler(int key, t_mlx_data *data)
+int	key_handler(int key, t_mlx_data *data)  //todo function is > 25 lines
 {
 	if (key == ESC)
 		exit_key(data);

@@ -4,8 +4,7 @@
 
 #include "free_mlx_data.h"
 
-
-void free_mlx_data(t_mlx_data *data)
+void	free_mlx_data(t_mlx_data *data)
 {
 	if (data)
 	{
@@ -15,13 +14,13 @@ void free_mlx_data(t_mlx_data *data)
 	}
 }
 
-void free_view(t_view *view)
+void	free_view(t_view *view)
 {
 	if (view)
 		free(view);
 }
 
-void free_map(t_map *map)
+void	free_map(t_map *map)
 {
 	if (map)
 	{
@@ -42,7 +41,7 @@ void free_map(t_map *map)
 	}
 }
 
-void free_img_data(t_img_data *data)
+void	free_img_data(t_img_data *data)
 {
 	if (data)
 	{
