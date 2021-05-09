@@ -53,6 +53,31 @@ void	my_mlx_pixel_put(t_img_data *data, int x, int y, int color)
 	*(unsigned int *)dst = color;
 }
 
+void set_stripe_hits_yy(t_stripe *stripe, int i_qv)
+{
+	stripe->hor_start = qv_array[i_qv - 1].hit_y;
+	stripe->hor_end = qv_array[i_qv].hit_y;
+}
+
+void set_stripe_hits_xx(t_stripe *stripe, int i_qv)
+{
+	stripe->hor_start = qv_array[i_qv - 1].hit_x;
+	stripe->hor_end = qv_array[i_qv].hit_x;
+}
+
+void set_stripe_hits_0y(t_stripe *stripe, int i_qv)
+{
+	stripe->hor_start = 0;
+	stripe->hor_end = qv_array[i_qv].hit_y;
+}
+
+void set_stripe_hits_0x(t_stripe *stripe, int i_qv)
+{
+	stripe->hor_start = 0;
+	stripe->hor_end = qv_array[i_qv].hit_x;
+}
+
+
 void	create_sprite_area(t_stripe *stripe, int i_qv) //todo 25 lines
 {
 	double	sum_height;
@@ -66,39 +91,19 @@ void	create_sprite_area(t_stripe *stripe, int i_qv) //todo 25 lines
 	== qv_array[i_qv].iy)
 	{
 		if (qv_array[i_qv - 1].hit_x == - 1 && qv_array[i_qv].hit_x == -1)
-		{
-			stripe->hor_start = qv_array[i_qv - 1].hit_y;
-			stripe->hor_end = qv_array[i_qv].hit_y;
-		}
+			set_stripe_hits_yy(stripe, i_qv);
 		else if (qv_array[i_qv - 1].hit_y == - 1 && qv_array[i_qv].hit_y == -1)
-		{
-			stripe->hor_start = qv_array[i_qv - 1].hit_x;
-			stripe->hor_end = qv_array[i_qv].hit_x;
-		}
+			set_stripe_hits_xx(stripe, i_qv);
 		else if (qv_array[i_qv].hit_x == -1)
-		{
-			stripe->hor_start = 0;
-			stripe->hor_end = qv_array[i_qv].hit_y;
-		}
+			set_stripe_hits_0y(stripe, i_qv);
 		else
-		{
-			stripe->hor_start = 0;
-			stripe->hor_end = qv_array[i_qv].hit_x;
-		}
+			set_stripe_hits_0x(stripe, i_qv);
 	}
 	else
-	{
 		if (qv_array[i_qv].hit_x == -1)
-		{
-			stripe->hor_start = 0;
-			stripe->hor_end = qv_array[i_qv].hit_y;
-		}
+			set_stripe_hits_0y(stripe, i_qv);
 		else
-		{
-			stripe->hor_start = 0;
-			stripe->hor_end = qv_array[i_qv].hit_x;
-		}
-	}
+			set_stripe_hits_0x(stripe, i_qv);
 }
 
 int	get_color_from_texture_by_pos(t_img_data *tex_img, t_stripe *stripe,
@@ -127,43 +132,18 @@ int	get_color_from_img(t_img_data *data, int ix, int iy)
 	return (color);
 }
 
-void	render_stripe_to_img(t_mlx_data *data, t_stripe *stripe) //todo 25 lines
+void	render_stripe_to_img(t_mlx_data *data, t_stripe *stripe)
 {
 	int				ix;
 	int				iy;
-	int				stripe_height;
-	t_stripe_cords	stripe_cords;
-	t_img_data		*texture;
-	int				color;
 
-	stripe_height = stripe->ceil_height + stripe->wall_height +
-			stripe->floor_height;
 	ix = stripe->ix_start;
 	while (ix < stripe->ix_end)
 	{
 		iy = 0;
-		while (iy < stripe->ceil_height)
-		{
-			color = data->info.map->ceiling;
-			my_mlx_pixel_put(data->info.data, ix, iy, color);
-			iy++;
-		}
-		while (iy < stripe_height - stripe->floor_height)
-		{
-			stripe_cords.ix = ix - stripe->ix_start;
-			stripe_cords.iy = iy;
-			texture = get_img_by_stripe(stripe);
-			color = get_color_from_texture_by_pos(texture, stripe,
-										 &stripe_cords);
-			my_mlx_pixel_put(data->info.data, ix, iy, color);
-			iy++;
-		}
-		while (iy < stripe_height)
-		{
-			color = data->info.map->floor;
-			my_mlx_pixel_put(data->info.data, ix, iy, color);
-			iy++;
-		}
+		render_stripe_ceil(data, stripe, &ix, &iy);
+		render_stripe_wall(data, stripe, &ix, &iy);
+		render_stripe_floor(data, stripe, &ix, &iy);
 		ix++;
 	}
 }
@@ -258,6 +238,51 @@ t_img_data	*create_texture(void *mlx, char *filename)
 	return (texture);
 }
 
-//todo ix = 15 iy = 10 segmentation fault
-//todo поменять цвет потолка на синий
-//todo конфиг файл может содержать любой порядок конфигов
+
+void render_stripe_ceil(t_mlx_data *data, t_stripe *stripe,int *ix, int *iy)
+{
+	int	color;
+
+	while ((*iy) < stripe->ceil_height)
+	{
+		color = data->info.map->ceiling;
+		my_mlx_pixel_put(data->info.data, (*ix), (*iy), color);
+		(*iy)++;
+	}
+}
+
+void render_stripe_wall(t_mlx_data *data, t_stripe *stripe,int *ix, int *iy)
+{
+	int				stripe_height;
+	t_stripe_cords	stripe_cords;
+	t_img_data		*texture;
+	int				color;
+
+	stripe_height = stripe->ceil_height + stripe->wall_height +
+					stripe->floor_height;
+	while ((*iy) < stripe_height - stripe->floor_height)
+	{
+		stripe_cords.ix = (*ix) - stripe->ix_start;
+		stripe_cords.iy = (*iy);
+		texture = get_img_by_stripe(stripe);
+		color = get_color_from_texture_by_pos(texture, stripe,
+											  &stripe_cords);
+		my_mlx_pixel_put(data->info.data, (*ix), (*iy), color);
+		(*iy)++;
+	}
+}
+
+void render_stripe_floor(t_mlx_data *data, t_stripe *stripe,int *ix, int *iy)
+{
+	int				stripe_height;
+	int				color;
+
+	stripe_height = stripe->ceil_height + stripe->wall_height +
+					stripe->floor_height;
+	while ((*iy) < stripe_height)
+	{
+		color = data->info.map->floor;
+		my_mlx_pixel_put(data->info.data, (*ix), (*iy), color);
+		(*iy)++;
+	}
+}

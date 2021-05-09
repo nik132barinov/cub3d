@@ -11,6 +11,8 @@ void	free_mlx_data(t_mlx_data *data)
 		free_map(data->info.map);
 		free_img_data(data->info.data);
 		mlx_destroy_window(data->mlx, data->win);
+		if (data->mlx)
+			free(data->mlx);
 	}
 }
 

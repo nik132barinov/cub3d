@@ -5,7 +5,6 @@
 
 int	main(int argc, char *argv[])
 {
-	printf("cos(0) = %f, cos(2_PI) = %f\n", cos(-0.1), cos(2 * M_PI));
 	if (argc == 2)
 		launch_cub3d(argv[1]);
 	else if (argc == 3)

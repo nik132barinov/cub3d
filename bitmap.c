@@ -3,7 +3,6 @@
 //
 
 #include "cub3d.h"
-#include <stdio.h>
 #include <sys/fcntl.h>
 
 void	ft_bitmap_data(t_cub3d_info *info, int fd)
@@ -11,26 +10,25 @@ void	ft_bitmap_data(t_cub3d_info *info, int fd)
 	int				i;
 	int				j;
 	unsigned char	buffer[4];
-	int				width;
-	int				height;
+	unsigned int	color;
+	unsigned int	pos;
 
-	width = info->map->width;
-	height = info->map->height;
-	i = width * (height - 1);
+	i = info->map->height - 1;
 	while (i >= 0)
 	{
 		j = 0;
-		while (j < width)
+		while (j < info->map->width)
 		{
-			buffer[0] = (unsigned char)(info->data->addr[i] % 256);
-			buffer[1] = (unsigned char)(info->data->addr[i] / 256 % 256);
-			buffer[2] = (unsigned char)(info->data->addr[i] / 256 / 256 % 256);
+			pos = i * info->data->line_size + j * (info->data->bbp / 8);
+			color = *(unsigned int *)(info->data->addr + pos);
+			buffer[0] = (unsigned char)(color % 256);
+			buffer[1] = (unsigned char)(color / 256 % 256);
+			buffer[2] = (unsigned char)(color / 256 / 256 % 256);
 			buffer[3] = (unsigned char)(0);
 			write(fd, buffer, 4);
-			i++;
 			j++;
 		}
-		i -= 2 * width;
+		i -= 1;
 	}
 }
 

@@ -8,12 +8,9 @@
 # include "cub3d.h"
 # include "map_parse.h"
 
-
 # define CELL_LENGTH 2500
 # define WALL_HEIGHT 2500
 # define CAMERA_HEIGHT 1750
-# define CEIL_COLOR 0x000000FF
-# define FLOOR_COLOR 0x0000FF00
 
 typedef struct	s_stripe
 {
@@ -64,6 +61,11 @@ void		update_img_data(t_mlx_data *data, t_map *map);
 t_img_data	*create_texture(void *mlx, char *filename);
 void		create_textures(t_mlx_data *data);
 void		print_stripe(t_stripe *stripe);
-
+void		render_stripe_ceil(t_mlx_data *data, t_stripe *stripe, int *ix,
+						 int *iy);
+void		render_stripe_wall(t_mlx_data *data, t_stripe *stripe, int *ix,
+						 int *iy);
+void		render_stripe_floor(t_mlx_data *data, t_stripe *stripe,int *ix, int *iy);
+void		set_stripe_hits_yy(t_stripe *stripe, int i_qv);
 
 #endif //RENDER_H

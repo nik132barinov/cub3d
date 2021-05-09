@@ -17,6 +17,7 @@
 # include "cub3d.h"
 # include "map_parse.h"
 # include "render.h"
+# include "move.h"
 
 int	exit_key(t_mlx_data *data);
 int	key_handler(int key, t_mlx_data *data);

@@ -8,7 +8,6 @@ void	map_print(t_map *map)
 
 	row = 0;
 	col = 0;
-	printf("n_rows = %d, n_cols = %d\n", map->n_rows, map->n_cols); //todo commt
 	while (row < map -> n_rows)
 	{
 		while (col < map -> n_cols)

@@ -7,11 +7,13 @@
 # include "libft/libft.h"
 # include "mlx/mlx.h"
 
+
 typedef struct	s_line
 {
 	int			n;
 	double		k;
 	double		m;
+	double		angle;
 
 }				t_line;
 
@@ -74,8 +76,7 @@ typedef struct	s_mlx_data
 
 void	set_pos_value(t_map *map, int row, int col, char value);
 char	get_pos_value(t_map *map, int row, int col);
-void	map_print(t_map *map); //todo functions do not belong to this header
-
+void	map_print(t_map *map);
 void	launch_cub3d(char *map_filename);
 void	save_bitmap(char *map_filename);
 
